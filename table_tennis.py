@@ -1,5 +1,6 @@
 players = []
 
+
 def add_player(name):
     players.append(name)
 
@@ -8,7 +9,7 @@ def get_player_pos(name):
     return players.index(name)
 
 
-def game_complete(winner, loser):
+def update_ladder(winner, loser):
     global players
     if winner in players:
         if loser in players:
@@ -37,9 +38,6 @@ def game_complete(winner, loser):
             players.append(winner)
             players.append(loser)
 
-# new winner
-#loser is john
-
 
 def init_players():
     add_player('Matt')
@@ -53,20 +51,20 @@ def main():
     init_players()
     print players
 
-#both in ladder already
-    game_complete('Ash', 'Matt')
+# both in ladder already
+    update_ladder('Ash', 'Matt')
     print players
 
-#new winner to ladder
-    game_complete('Mike', 'Ash')
+# new winner to ladder
+    update_ladder('Mike', 'Ash')
     print players
 
 #both not in ladder
-    game_complete('Lee', 'Andy')
+    update_ladder('Lee', 'Andy')
     print players
 
 # loser not in ladder already
-    game_complete('Matt', 'Emily')
+    update_ladder('Matt', 'Emily')
     print players
 
 
