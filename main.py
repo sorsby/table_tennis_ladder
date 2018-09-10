@@ -1,5 +1,6 @@
 from ladder import Ladder
 from player import Player
+import click
 
 
 def add_test_player(players, name):
@@ -30,12 +31,33 @@ def run_tests(test_players, ladder):
     print ladder
 
 
-def main():
+@click.command()
+@click.option('/test;/no-test')
+@click.option('--add', '-a')
+@click.option('--update', '-u', nargs=2)
+def main(test, add, update):
     ladder = Ladder()
-    test_players = ladder.get_players()
-    print ladder
+    players = ladder.get_players()
 
-    run_tests(test_players, ladder)
+    if test:
+        run_tests(players, ladder)
+        return
+
+    if add:
+        ladder.add_player(Player(add))
+
+    if update:
+        winner = ladder.get_player(update[0])
+        loser = ladder.get_player(update[1])
+
+        if not winner:
+            winner = Player(update[0])
+        if not loser:
+            loser = Player(update[1])
+
+        ladder.update(winner, loser)
+
+    print ladder
 
 
 '''
