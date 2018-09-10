@@ -26,12 +26,16 @@ class Ladder:
 
     def add_player(self, player):
         self.ladder.append(player)
+        self.save()
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
 
     def get_player(self, name):
-        return self.players[name]
+        try:
+            return self.players[name]
+        except:
+            return None
 
     def get_players(self):
         return self.players
