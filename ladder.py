@@ -61,6 +61,9 @@ class Ladder:
                 f.write(name + '\n')
 
     def read(self):
-        with open(self.ladder_filename, 'r') as f:
-            lines = f.readlines()
-            return [line.rstrip('\n') for line in lines]
+        try:
+            with open(self.ladder_filename, 'r') as f:
+                lines = f.readlines()
+                return [line.rstrip('\n') for line in lines]
+        except:
+            self.save()

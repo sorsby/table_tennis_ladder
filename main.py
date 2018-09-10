@@ -1,22 +1,12 @@
 from ladder import Ladder
 from player import Player
 
-def init_test_players():
-    names = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
-    players = {}
-    for name in names:
-        players[name] = Player(name)
-    return players
 
 def add_test_player(players, name):
     players[name] = Player(name)
 
-def main():
-    ladder = Ladder()
-    #dict of player name keys and player object values
-    test_players = ladder.get_players()
-    print ladder
 
+def run_tests(test_players, ladder):
     ladder.add_player(Player('Malik'))
     print ladder
 
@@ -38,6 +28,15 @@ def main():
     add_test_player(test_players, 'Pam')
     ladder.update(test_players['Sam'], test_players['Pam'])
     print ladder
+
+
+def main():
+    ladder = Ladder()
+    test_players = ladder.get_players()
+    print ladder
+
+    run_tests(test_players, ladder)
+
 
 '''
 Earlier test code.
