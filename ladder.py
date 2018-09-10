@@ -3,14 +3,29 @@ class Ladder:
     ladder = []
 
     def __init__(self, players):
-        self.add(players)
+        self.ladder = players
 
-    def add(self, players):
+    def __repr__(self):
+        return str(self.ladder)
+
+    def add_player(self, players):
         self.ladder.append(players)
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
 
-    def update_ladder(self, winner, loser):
+    def update(self, winner, loser):
         players = self.ladder
-        pass
+        if winner in players and loser in players:
+            winner_pos = self.get_player_pos(winner)
+            loser_pos = self.get_player_pos(loser)
+            del players[winner_pos]
+            players.insert(loser_pos, winner)
+        elif winner in players and loser not in players:
+            self.add_player(loser)
+        elif winner not in players and loser in players:
+            loser_pos = self.get_player_pos(loser)
+            players.insert(loser_pos, winner)
+        else:
+            self.add_player(winner)
+            self.add_player(loser)
