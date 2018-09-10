@@ -9,32 +9,26 @@ def get_player_pos(name):
     return players.index(name)
 
 
+#use score as input to determine the winner
 def update_ladder(winner, loser):
     global players
     if winner in players:
         if loser in players:
-            #both in list
+            # both in ladder
             winner_pos = get_player_pos(winner)
             loser_pos = get_player_pos(loser)
-            untouched = players[:loser_pos]
-
-            shift = list(players)
-            del shift[winner_pos]
-
-            players = untouched + [winner] + shift
+            del players[winner_pos]
+            players.insert(loser_pos, winner)
         else:
-            #loser not in players
+            # loser not in ladder
             players.append(loser)
     else:
         if loser in players:
-            # winner not in list player in list
+            # winner not in ladder, loser in ladder
             loser_pos = get_player_pos(loser)
-            untouched = players[:loser_pos]
-            shift = players[loser_pos:]
-            untouched.append(winner)
-            players = untouched + shift
+            players.insert(loser_pos, winner)
         else:
-            # winner not in list loser not in list
+            # winner not in ladder, loser not in ladder
             players.append(winner)
             players.append(loser)
 
