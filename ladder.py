@@ -1,3 +1,5 @@
+from player import Player
+
 class Ladder:
 
     ladder = []
@@ -6,10 +8,10 @@ class Ladder:
         self.ladder = players
 
     def __repr__(self):
-        return str(self.ladder)
+        return str([player.name for player in self.ladder])
 
-    def add_player(self, players):
-        self.ladder.append(players)
+    def add_player(self, player):
+        self.ladder.append(player)
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
