@@ -1,5 +1,19 @@
 from ladder import Ladder
 from player import Player
+from prettytable import PrettyTable
+
+def print_ladder(ladder):
+    t = PrettyTable(['Name', 'Position'])
+    i = 0
+    for player in ladder.get_rankings():
+        i += 1
+        if i == 1:
+            t.add_row(['$$$ ' + player.name + ' $$$', i])
+        else:
+            t.add_row([player.name, i])
+    print t
+    print '\n'
+    t.clear()
 
 
 def add_test_player(players, name):
@@ -8,32 +22,36 @@ def add_test_player(players, name):
 
 def run_tests(test_players, ladder):
     ladder.add_player(Player('Malik'))
-    print ladder
+    print_ladder(ladder)
 
     ladder.update(test_players['Matt'], test_players['Ash'])
-    print ladder
+    print_ladder(ladder)
 
     ladder.update(test_players['Dan'], test_players['Matt'])
-    print ladder
+    print_ladder(ladder)
 
     add_test_player(test_players, 'James')
     ladder.update(test_players['Dan'], test_players['James'])
-    print ladder
+    print_ladder(ladder)
 
     add_test_player(test_players, 'Sandeep')
     ladder.update(test_players['Sandeep'], test_players['James'])
-    print ladder
+    print_ladder(ladder)
 
     add_test_player(test_players, 'Sam')
     add_test_player(test_players, 'Pam')
     ladder.update(test_players['Sam'], test_players['Pam'])
-    print ladder
+    print_ladder(ladder)
+
+    add_test_player(test_players, 'Spam')
+    ladder.update(test_players['Dan'], test_players['Spam'])
+    print_ladder(ladder)
 
 
 def main():
     ladder = Ladder()
     test_players = ladder.get_players()
-    print ladder
+    print_ladder(ladder)
 
     run_tests(test_players, ladder)
 
