@@ -1,11 +1,25 @@
 from player import Player
 
+
 class Ladder:
 
+    # dict of player name keys and associated player objects
+    players = {}
+    # list of Player objects where each player has a name attribute.
     ladder = []
+    ladder_filename = "ladder_standings"
 
-    def __init__(self, players):
-        self.ladder = players
+    def __init__(self):
+        # self.ladder = players
+        players = self.read()
+        #file not found or empty load some default data for testing
+        if not players:
+            players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
+
+        for player in players:
+            player_object = Player(player)
+            self.ladder.append(player_object)
+            self.players[player] = player_object
 
     def __repr__(self):
         return str([player.name for player in self.ladder])
@@ -15,6 +29,12 @@ class Ladder:
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
+
+    def get_player(self, name):
+        return self.players[name]
+
+    def get_players(self):
+        return self.players
 
     def update(self, winner, loser):
         players = self.ladder
@@ -31,3 +51,16 @@ class Ladder:
         else:
             self.add_player(winner)
             self.add_player(loser)
+
+        self.save()
+
+    def save(self):
+        with open(self.ladder_filename, 'w') as f:
+            for player in self.ladder:
+                name = player.name
+                f.write(name + '\n')
+
+    def read(self):
+        with open(self.ladder_filename, 'r') as f:
+            lines = f.readlines()
+            return [line.rstrip('\n') for line in lines]

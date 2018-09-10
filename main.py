@@ -12,8 +12,9 @@ def add_test_player(players, name):
     players[name] = Player(name)
 
 def main():
-    test_players = init_test_players()
-    ladder = Ladder(test_players.values())
+    ladder = Ladder()
+    #dict of player name keys and player object values
+    test_players = ladder.get_players()
     print ladder
 
     ladder.add_player(Player('Malik'))
