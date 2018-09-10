@@ -12,7 +12,7 @@ class Ladder:
     def __init__(self):
         # self.ladder = players
         players = self.read()
-        #file not found or empty load some default data for testing
+        # file not found or empty load some default data for testing
         if not players:
             players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
 

@@ -30,6 +30,7 @@ def run_tests(test_players, ladder):
     ladder.update(test_players['Sam'], test_players['Pam'])
     print ladder
 
+
 @click.command()
 @click.option('/test;/no-test')
 @click.option('--add', '-a')
@@ -41,7 +42,7 @@ def main(test, add, update):
     if test:
         run_tests(players, ladder)
         return
-    
+
     if add:
         ladder.add_player(Player(add))
 
@@ -55,11 +56,8 @@ def main(test, add, update):
             loser = Player(update[1])
 
         ladder.update(winner, loser)
-    
+
     print ladder
-
-
-
 
 
 '''
