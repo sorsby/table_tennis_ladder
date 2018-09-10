@@ -10,7 +10,6 @@ class Ladder:
     ladder_filename = "ladder_standings"
 
     def __init__(self):
-        # self.ladder = players
         players = self.read()
         # file not found or empty load some default data for testing
         if not players:
@@ -39,6 +38,9 @@ class Ladder:
 
     def get_players(self):
         return self.players
+
+    def get_rankings(self):
+        return self.ladder
 
     def update(self, winner, loser):
         players = self.ladder
