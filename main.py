@@ -52,7 +52,8 @@ def run_tests(test_players, ladder):
 @click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
-def main(test, add, update, view):
+@click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
+def main(test, add, update, view, search):
     """A simple program to view and administrate the IW Table Tennis ladder."""
     ladder = Ladder()
     players = ladder.get_players()
@@ -71,6 +72,12 @@ def main(test, add, update, view):
 
     if view:
         print_ladder(ladder)
+
+    if search:
+        player = ladder.get_player(search)
+        if player:
+            print(player.name + " is rank: " +
+                  str(ladder.get_player_pos(player) + 1))
 
 
 def input_game(ladder, arg0, arg1):
