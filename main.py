@@ -113,6 +113,8 @@ def main(test, add, update, view, search, remove, champion):
         if player:
             print(player.name + " is rank: " +
                   str(ladder.get_player_pos(player) + 1))
+        else:
+            print "Player not found. Check spelling and try again."
 
     if remove:
         for name in remove:

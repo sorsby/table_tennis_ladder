@@ -29,6 +29,7 @@ class Ladder:
             self.ladder.append(player)
             self.players[name] = player
             self.save()
+            print "Player '%s' added successfully." % name
         else:
             print "ERROR: %s already in the ladder, skipping." % name
 
@@ -39,6 +40,7 @@ class Ladder:
             del self.players[name]
 
             self.save()
+            print "Player '%s' removed successfully." % name
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
