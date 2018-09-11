@@ -32,7 +32,7 @@ champ = """
 """
 
 
-def print_ladder(ladder):
+def pretty_print(ladder):
     t = PrettyTable(['Name', 'Position'])
     i = 0
     for player in ladder.get_rankings():
@@ -49,30 +49,30 @@ def add_test_player(players, name):
 
 def run_tests(test_players, ladder):
     ladder.add_player(Player('Malik'))
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     ladder.update(test_players['Matt'], test_players['Ash'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     ladder.update(test_players['Dan'], test_players['Matt'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     add_test_player(test_players, 'James')
     ladder.update(test_players['Dan'], test_players['James'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     add_test_player(test_players, 'Sandeep')
     ladder.update(test_players['Sandeep'], test_players['James'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     add_test_player(test_players, 'Sam')
     add_test_player(test_players, 'Pam')
     ladder.update(test_players['Sam'], test_players['Pam'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
     add_test_player(test_players, 'Spam')
     ladder.update(test_players['Dan'], test_players['Spam'])
-    print_ladder(ladder)
+    pretty_print(ladder)
 
 
 @click.command()
@@ -99,12 +99,14 @@ def main(test, add, update, view, search, remove, champion):
     if add and not update:
         for name in add:
             ladder.add_player(name)
+        pretty_print(ladder)
 
     if update:
         input_game(ladder, update[0], update[1])
+        pretty_print(ladder)
 
     if view:
-        print_ladder(ladder)
+        pretty_print(ladder)
 
     if search:
         player = ladder.get_player(search)
@@ -115,6 +117,7 @@ def main(test, add, update, view, search, remove, champion):
     if remove:
         for name in remove:
             ladder.remove_player(name)
+        pretty_print(ladder)
 
     if champion:
         print champ % ladder.get_champion().name
@@ -128,33 +131,6 @@ def input_game(ladder, arg0, arg1):
     if not loser:
         loser = Player(arg1)
     ladder.update(winner, loser)
-
-
-'''
-Earlier test code.
-def main():
-    test_players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
-    ladder = Ladder(test_players)
-    print ladder
-
-    ladder.add_player('Malik')
-    print ladder
-
-    ladder.update('Matt', 'Ash')
-    print ladder
-
-    ladder.update('Dan', 'Matt')
-    print ladder
-
-    ladder.update('Dan', 'James')
-    print ladder
-
-    ladder.update('Sandeep', 'James')
-    print ladder
-
-    ladder.update('Sam', 'Pam')
-    print ladder
-'''
 
 
 if __name__ == '__main__':
