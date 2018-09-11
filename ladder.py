@@ -23,12 +23,24 @@ class Ladder:
     def __repr__(self):
         return str([player.name for player in self.ladder])
 
-    def add_player(self, player):
-        if not player.name in self.players.keys():
+    def add_player(self, name):
+        if not name in self.players.keys():
+            player = Player(name)
             self.ladder.append(player)
+            self.players[name] = player
             self.save()
         else:
-            print "ERROR: %s already in the ladder, skipping." % player.name
+            print "ERROR: %s already in the ladder, skipping." % name
+
+    def remove_player(self, name):
+        if name in self.players.keys():
+            player = self.get_player(name)
+            self.ladder.remove(player)
+            del self.players[name]
+
+            self.save()
+        else:
+            print "ERROR: %s is not in the ladder, skipping." % name
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
@@ -44,6 +56,9 @@ class Ladder:
 
     def get_rankings(self):
         return self.ladder
+
+    def get_champion(self):
+        return self.ladder[0]
 
     def update(self, winner, loser):
         players = self.ladder

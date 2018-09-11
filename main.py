@@ -3,6 +3,34 @@ from player import Player
 import click
 from prettytable import PrettyTable
 
+welcome = """
+          ,;;;!!!!!;;.
+        :!!!!!!!!!!!!!!;    Infinity Works Graduate Scheme 2018
+      :!!!!!!!!!!!!!!!!!;       Ash & Matt's Ping Pong Ladder Extravaganza
+     ;!!!!!!!!!!!!!!!!!!!;          All Rights Reserved (c) 2018
+    ;!!!!!!!!!!!!!!!!!!!!!
+    ;!!!!!!!!!!!!!!!!!!!!'
+    ;!!!!!!!!!!!!!!!!!!!'       o      .   _______ _______
+     :!!!!!!!!!!!!!!!!'         \_ 0     /______//______/|   @_o
+      ,!!!!!!!!!!!!!''            /\_,  /______//______/     /\\
+   ,;!!!''''''''''               | \    |      ||      |     / |
+ .!!!!'
+!!!!
+"""
+
+champ = """
+     ___________
+    '._==_==_=_.'
+    .-\:      /-.
+   | (|:.     |) |
+    '-|:.     |-'
+      \::.    /     Current Champ: %s
+       '::. .'
+         ) (
+       _.' '._
+      `-------`
+"""
+
 
 def print_ladder(ladder):
     t = PrettyTable(['Name', 'Position'])
@@ -53,19 +81,24 @@ def run_tests(test_players, ladder):
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
 @click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
-def main(test, add, update, view, search):
+@click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
+@click.option('--champion', '-c', is_flag=True, help="Use it and find out.")
+def main(test, add, update, view, search, remove, champion):
     """A simple program to view and administrate the IW Table Tennis ladder."""
     ladder = Ladder()
     players = ladder.get_players()
+
+    print welcome
 
     if test:
         run_tests(players, ladder)
         return
 
 # TODO: Bug present when adding a new player and updating the ladder in the same command.
+# TODO: Change add function to create player instance instead of doing it here.
     if add and not update:
         for name in add:
-            ladder.add_player(Player(name))
+            ladder.add_player(name)
 
     if update:
         input_game(ladder, update[0], update[1])
@@ -78,6 +111,13 @@ def main(test, add, update, view, search):
         if player:
             print(player.name + " is rank: " +
                   str(ladder.get_player_pos(player) + 1))
+
+    if remove:
+        for name in remove:
+            ladder.remove_player(name)
+
+    if champion:
+        print champ % ladder.get_champion().name
 
 
 def input_game(ladder, arg0, arg1):
