@@ -25,8 +25,8 @@ champ = """
    | (|:.     |) |
     '-|:.     |-'
       \::.    /     Current Champ: %s
-       '::. .'
-         ) (
+       '::. .'          %s is overwhelmed with a feeling of pride and accomplishment.
+         ) (            %s has truly earned the adoration of their peers.
        _.' '._
       `-------`
 """
@@ -82,7 +82,7 @@ def run_tests(test_players, ladder):
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
 @click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
-@click.option('--champion', '-c', is_flag=True, help="Use it and find out.")
+@click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
 def main(test, add, update, view, search, remove, champion):
     """A simple program to view and administrate the IW Table Tennis ladder."""
     ladder = Ladder()
@@ -120,7 +120,8 @@ def main(test, add, update, view, search, remove, champion):
         pretty_print(ladder)
 
     if champion:
-        print champ % ladder.get_champion().name
+        name = ladder.get_champion().name
+        print champ % (name, name, name)
 
 
 def input_game(ladder, arg0, arg1):
