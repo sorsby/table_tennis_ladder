@@ -9,10 +9,7 @@ def print_ladder(ladder):
     i = 0
     for player in ladder.get_rankings():
         i += 1
-        if i == 1:
-            t.add_row(['$$$ ' + player.name + ' $$$', i])
-        else:
-            t.add_row([player.name, i])
+        t.add_row([player.name, i])
     print t
     print '\n'
     t.clear()
@@ -52,8 +49,8 @@ def run_tests(test_players, ladder):
 
 @click.command()
 @click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
-@click.option('--add', '-a', multiple=True, help='Add a player to the ladder.')
-@click.option('--update', '-u', nargs=2, help='Update ladder with results of a game.')
+@click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
+@click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
 def main(test, add, update, view):
     """A simple program to view and administrate the IW Table Tennis ladder."""
