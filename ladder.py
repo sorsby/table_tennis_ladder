@@ -24,8 +24,11 @@ class Ladder:
         return str([player.name for player in self.ladder])
 
     def add_player(self, player):
-        self.ladder.append(player)
-        self.save()
+        if not player.name in self.players.keys():
+            self.ladder.append(player)
+            self.save()
+        else:
+            print "ERROR: %s already in the ladder, skipping." % player.name
 
     def get_player_pos(self, player):
         return self.ladder.index(player)

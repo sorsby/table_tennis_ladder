@@ -3,6 +3,7 @@ from player import Player
 import click
 from prettytable import PrettyTable
 
+
 def print_ladder(ladder):
     t = PrettyTable(['Name', 'Position'])
     i = 0
@@ -50,10 +51,12 @@ def run_tests(test_players, ladder):
 
 
 @click.command()
-@click.option('/test;/no-test')
-@click.option('--add', '-a')
-@click.option('--update', '-u', nargs=2)
-def main(test, add, update):
+@click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
+@click.option('--add', '-a', multiple=True, help='Add a player to the ladder.')
+@click.option('--update', '-u', nargs=2, help='Update ladder with results of a game.')
+@click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
+def main(test, add, update, view):
+    """A simple program to view and administrate the IW Table Tennis ladder."""
     ladder = Ladder()
     players = ladder.get_players()
 
@@ -61,21 +64,26 @@ def main(test, add, update):
         run_tests(players, ladder)
         return
 
-    if add:
-        ladder.add_player(Player(add))
+# TODO: Bug present when adding a new player and updating the ladder in the same command.
+    if add and not update:
+        for name in add:
+            ladder.add_player(Player(name))
 
     if update:
-        winner = ladder.get_player(update[0])
-        loser = ladder.get_player(update[1])
+        input_game(ladder, update[0], update[1])
 
-        if not winner:
-            winner = Player(update[0])
-        if not loser:
-            loser = Player(update[1])
+    if view:
+        print_ladder(ladder)
 
-        ladder.update(winner, loser)
 
-    print_ladder(ladder)
+def input_game(ladder, arg0, arg1):
+    winner = ladder.get_player(arg0)
+    loser = ladder.get_player(arg1)
+    if not winner:
+        winner = Player(arg0)
+    if not loser:
+        loser = Player(arg1)
+    ladder.update(winner, loser)
 
 
 '''
