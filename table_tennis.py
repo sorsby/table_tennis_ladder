@@ -26,7 +26,7 @@ champ = """
     '-|:.     |-'
       \::.    /     Current Champ: %s
        '::. .'          %s is overwhelmed with a feeling of pride and accomplishment.
-         ) (            %s has truly earned the adoration of their peers.
+         ) (            %s has truly earned the adoration of his/her peers.
        _.' '._
       `-------`
 """

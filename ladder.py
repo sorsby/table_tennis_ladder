@@ -78,6 +78,7 @@ class Ladder:
             self.add_player(winner)
             self.add_player(loser)
 
+        print "Leaderboard updated: '%s' beat '%s'." % (winner.name, loser.name)
         self.save()
 
     def save(self):
