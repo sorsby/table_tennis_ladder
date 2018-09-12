@@ -1,7 +1,11 @@
 from ladder import Ladder
 from player import Player
+from group import Group
 import click
 from prettytable import PrettyTable
+
+group_list_filename = "group_list"
+groups = {}
 
 welcome = """
           ,;;;!!!!!;;.
@@ -75,7 +79,36 @@ def run_tests(test_players, ladder):
     pretty_print(ladder)
 
 
+def read_group_list():
+    try:
+        with open(group_list_filename, 'r') as f:
+            for line in f:
+                lines = f.readlines()
+                for group in [line.rstrip('\n') for line in lines]:
+                    groups[group] = None
+    except:
+        # no file so create one with test data
+        groups['Smellons'] = None
+        groups['Grads'] = None
+        save_group_list()
+
+
+def save_group_list():
+    with open(group_list_filename, 'w') as f:
+        for group in groups.keys():
+            f.write(group + '\n')
+
+
+def get_group(name):
+    # try:
+    return Group(name)
+    # except:
+    print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
+    return None
+
+
 @click.command()
+@click.argument('group')
 @click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
 @click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
@@ -83,47 +116,54 @@ def run_tests(test_players, ladder):
 @click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
 @click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
-def main(test, add, update, view, search, remove, champion):
+def main(group, test, add, update, view, search, remove, champion):
     """A simple program to view and administrate the IW Table Tennis ladder."""
-    ladder = Ladder()
-    players = ladder.get_players()
+
+    # players = ladder.get_players()
 
     print welcome
 
-    if test:
-        run_tests(players, ladder)
+    read_group_list()
+
+    # read group namme argument from command line and get group
+    cur_group = get_group(group)
+    if not cur_group:
         return
 
-# TODO: Bug present when adding a new player and updating the ladder in the same command.
-# TODO: Change add function to create player instance instead of doing it here.
-    if add and not update:
+    group_ladder = cur_group.get_ladder()
+
+    if test:
+        # implement tests for groups
+        pass
+
+    if add:
         for name in add:
-            ladder.add_player(name)
-        pretty_print(ladder)
-
-    if update:
-        input_game(ladder, update[0], update[1])
-        pretty_print(ladder)
-
-    if view:
-        pretty_print(ladder)
-
-    if search:
-        player = ladder.get_player(search)
-        if player:
-            print(player.name + " is rank: " +
-                  str(ladder.get_player_pos(player) + 1))
-        else:
-            print "Player not found. Check spelling and try again."
+            group_ladder.add_player(name)
+        pretty_print(group_ladder)
 
     if remove:
         for name in remove:
-            ladder.remove_player(name)
-        pretty_print(ladder)
+            group_ladder.remove_player(name)
+        pretty_print(group_ladder)
 
     if champion:
-        name = ladder.get_champion().name
+        name = group_ladder.get_champion().name
         print champ % (name, name, name)
+
+    if update:
+        input_game(group_ladder, update[0], update[1])
+        pretty_print(group_ladder)
+
+    if view:
+        pretty_print(group_ladder)
+
+# if search:
+#     player = ladder.get_player(search)
+#     if player:
+#         print(player.name + " is rank: " +
+#               str(ladder.get_player_pos(player) + 1))
+#     else:
+#         print "Player not found. Check spelling and try again."
 
 
 def input_game(ladder, arg0, arg1):

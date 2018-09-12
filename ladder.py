@@ -3,17 +3,24 @@ from player import Player
 
 class Ladder:
 
-    # dict of player name keys and associated player objects
-    players = {}
     # list of Player objects where each player has a name attribute.
     ladder = []
-    ladder_filename = "ladder_standings"
+    ladder_folder = "group_ladders/%s"
 
-    def __init__(self):
+    def __init__(self, name):
+        self.players = {}
+        self.ladder_filename = name
         players = self.read()
         # file not found or empty load some default data for testing
         if not players:
+            self.players['Ash'] = Player('Ash')
+            self.players['Matt'] = Player('Matt')
+            self.players['Mike'] = Player('Dan')
+            self.players['Dan'] = Player('Dan')
+            self.players['Emily'] = Player('Emily')
             players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
+            self.save()
+
 
         for player in players:
             player_object = Player(player)
@@ -82,14 +89,15 @@ class Ladder:
         self.save()
 
     def save(self):
-        with open(self.ladder_filename, 'w') as f:
+        filename = self.ladder_folder % self.ladder_filename
+        with open(filename, 'w') as f:
             for player in self.ladder:
-                name = player.name
-                f.write(name + '\n')
+                f.write(player.name + '\n')
 
     def read(self):
+        filename = self.ladder_folder % self.ladder_filename
         try:
-            with open(self.ladder_filename, 'r') as f:
+            with open(filename, 'r') as f:
                 lines = f.readlines()
                 return [line.rstrip('\n') for line in lines]
         except:
