@@ -36,7 +36,7 @@ class Ladder:
             self.ladder.append(player)
             self.players[name] = player
             self.save()
-            print "Player '%s' added successfully." % name
+            print "Player '%s' successfully added to group '%s'." % (name, self.ladder_filename)
         else:
             print "ERROR: %s already in the ladder, skipping." % name
 
@@ -47,7 +47,7 @@ class Ladder:
             del self.players[name]
 
             self.save()
-            print "Player '%s' removed successfully." % name
+            print "Player '%s' successfully removed from group '%s'." % (name, self.ladder_filename)
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
@@ -77,13 +77,13 @@ class Ladder:
             del players[winner_pos]
             players.insert(loser_pos, winner)
         elif winner in players and loser not in players:
-            self.add_player(loser)
+            self.add_player(loser.name)
         elif winner not in players and loser in players:
             loser_pos = self.get_player_pos(loser)
             players.insert(loser_pos, winner)
         else:
-            self.add_player(winner)
-            self.add_player(loser)
+            self.add_player(winner.name)
+            self.add_player(loser.name)
 
         print "Leaderboard updated: '%s' beat '%s'." % (winner.name, loser.name)
         self.save()
