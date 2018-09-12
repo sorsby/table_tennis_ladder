@@ -11,6 +11,7 @@ class Ladder:
         self.players = {}
         self.ladder_filename = name
         players = self.read()
+
         # file not found or empty load some default data for testing
         if not players:
             self.players['Ash'] = Player('Ash')
@@ -20,7 +21,6 @@ class Ladder:
             self.players['Emily'] = Player('Emily')
             players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
             self.save()
-
 
         for player in players:
             player_object = Player(player)
@@ -36,7 +36,8 @@ class Ladder:
             self.ladder.append(player)
             self.players[name] = player
             self.save()
-            print "Player '%s' successfully added to group '%s'." % (name, self.ladder_filename)
+            print "Player '%s' successfully added to group '%s'." % (
+                name, self.ladder_filename)
         else:
             print "ERROR: %s already in the ladder, skipping." % name
 
@@ -47,7 +48,8 @@ class Ladder:
             del self.players[name]
 
             self.save()
-            print "Player '%s' successfully removed from group '%s'." % (name, self.ladder_filename)
+            print "Player '%s' successfully removed from group '%s'." % (
+                name, self.ladder_filename)
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
@@ -85,7 +87,8 @@ class Ladder:
             self.add_player(winner.name)
             self.add_player(loser.name)
 
-        print "Leaderboard updated: '%s' beat '%s'." % (winner.name, loser.name)
+        print "Leaderboard updated: '%s' beat '%s'." % (
+            winner.name, loser.name)
         self.save()
 
     def save(self):

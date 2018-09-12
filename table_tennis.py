@@ -4,7 +4,7 @@ from group import Group
 import click
 from prettytable import PrettyTable
 
-group_list_filename = "group_list"
+group_list_filename = "groups"
 groups = {}
 
 welcome = """
@@ -79,32 +79,12 @@ def run_tests(test_players, ladder):
     pretty_print(ladder)
 
 
-def read_group_list():
-    try:
-        with open(group_list_filename, 'r') as f:
-            for line in f:
-                lines = f.readlines()
-                for group in [line.rstrip('\n') for line in lines]:
-                    groups[group] = None
-    except:
-        # no file so create one with test data
-        groups['Smellons'] = None
-        groups['Grads'] = None
-        save_group_list()
-
-
-def save_group_list():
-    with open(group_list_filename, 'w') as f:
-        for group in groups.keys():
-            f.write(group + '\n')
-
-
 def get_group(name):
-    # try:
-    return Group(name)
-    # except:
-    print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
-    return None
+    try:
+        return Group(name)
+    except:
+        print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
+        return None
 
 
 @click.command()
@@ -117,13 +97,13 @@ def get_group(name):
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
 @click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
 def main(group, test, add, update, view, search, remove, champion):
-    """A simple program to view and administrate the IW Table Tennis ladder."""
+    """A simple program to view and administrate the IW Table Tennis ladder.
+
+        Provide a GROUP name and use the options listed below to interact with the system."""
 
     # players = ladder.get_players()
 
     print welcome
-
-    read_group_list()
 
     # read group namme argument from command line and get group
     cur_group = get_group(group)
@@ -135,25 +115,20 @@ def main(group, test, add, update, view, search, remove, champion):
     if test:
         # implement tests for groups
         pass
-
     if add:
         for name in add:
             group_ladder.add_player(name)
         pretty_print(group_ladder)
-
     if remove:
         for name in remove:
             group_ladder.remove_player(name)
         pretty_print(group_ladder)
-
     if champion:
         name = group_ladder.get_champion().name
         print champ % (name, name, name)
-
     if update:
         input_game(group_ladder, update[0], update[1])
         pretty_print(group_ladder)
-
     if view:
         pretty_print(group_ladder)
 

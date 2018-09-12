@@ -1,5 +1,6 @@
 from ladder import Ladder
 
+
 class Group:
 
     '''
@@ -16,3 +17,6 @@ class Group:
 
     def get_ladder(self):
         return self.ladder
+
+    def get_name(self):
+        return self.name
