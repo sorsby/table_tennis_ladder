@@ -1,5 +1,6 @@
 from player import Player
 from htmlify import Htmlify
+from prettytable import PrettyTable
 
 
 class Ladder:
@@ -30,7 +31,14 @@ class Ladder:
                 self.players[player] = player_object
 
     def __repr__(self):
-        return str([player.name for player in self.ladder])
+        t = PrettyTable(['Name', 'Position'])
+        i = 0
+        for player in self.get_rankings():
+            i += 1
+            t.add_row([player.name, i])
+        message = "Viewing ladder rankings for '%s' group." % self.ladder_filename
+        return message + '\n' + t.get_string() + '\n'
+        # return str([player.name for player in self.ladder])
 
     def add_player(self, name):
         if not name in self.players.keys():
