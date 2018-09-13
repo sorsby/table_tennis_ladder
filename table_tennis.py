@@ -8,22 +8,22 @@ from player import Player
 group_list_filename = "groups"
 groups = {}
 
-welcome = """
+welcome = r"""
           ,;;;!!!!!;;.
         :!!!!!!!!!!!!!!;    Infinity Works Graduate Scheme 2018
       :!!!!!!!!!!!!!!!!!;       Ash & Matt's Ping Pong Ladder Extravaganza
      ;!!!!!!!!!!!!!!!!!!!;          All Rights Reserved (c) 2018
     ;!!!!!!!!!!!!!!!!!!!!!
     ;!!!!!!!!!!!!!!!!!!!!'
-    ;!!!!!!!!!!!!!!!!!!!'       o      .   _______ _______
+    ;!!!!!!!!!!!!!!!!!!!'       o      .  _______ _______
      :!!!!!!!!!!!!!!!!'         \_ 0     /______//______/|   @_o
-      ,!!!!!!!!!!!!!''            /\_,  /______//______/     /\\
+      ,!!!!!!!!!!!!!''            /\_,  /______//______/     /\
    ,;!!!''''''''''               | \    |      ||      |     / |
  .!!!!'
 !!!!
 """
 
-champ = """
+champ = r"""
   ___________
  '._==_==_=_.'
  .-\:      /-.
@@ -50,34 +50,6 @@ def pretty_print(ladder):
 
 def add_test_player(players, name):
     players[name] = Player(name)
-
-'''Not used atm'''
-def run_tests(test_players, ladder):
-    ladder.add_player(Player('Malik'))
-    pretty_print(ladder)
-
-    ladder.update(test_players['Matt'], test_players['Ash'])
-    pretty_print(ladder)
-
-    ladder.update(test_players['Dan'], test_players['Matt'])
-    pretty_print(ladder)
-
-    add_test_player(test_players, 'James')
-    ladder.update(test_players['Dan'], test_players['James'])
-    pretty_print(ladder)
-
-    add_test_player(test_players, 'Sandeep')
-    ladder.update(test_players['Sandeep'], test_players['James'])
-    pretty_print(ladder)
-
-    add_test_player(test_players, 'Sam')
-    add_test_player(test_players, 'Pam')
-    ladder.update(test_players['Sam'], test_players['Pam'])
-    pretty_print(ladder)
-
-    add_test_player(test_players, 'Spam')
-    ladder.update(test_players['Dan'], test_players['Spam'])
-    pretty_print(ladder)
 
 
 def get_group(name, test):
@@ -139,14 +111,6 @@ def main(group, test, add, update, view, search, remove, champion, new):
         pretty_print(group_ladder)
     if view:
         pretty_print(group_ladder)
-
-# if search:
-#     player = ladder.get_player(search)
-#     if player:
-#         print(player.name + " is rank: " +
-#               str(ladder.get_player_pos(player) + 1))
-#     else:
-#         print "Player not found. Check spelling and try again."
 
 
 def input_game(ladder, arg0, arg1):

@@ -55,24 +55,6 @@ class Ladder:
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
-    def get_player_pos(self, player):
-        return self.ladder.index(player)
-
-    def get_player(self, name):
-        try:
-            return self.players[name]
-        except:
-            return None
-
-    def get_players(self):
-        return self.players
-
-    def get_rankings(self):
-        return self.ladder
-
-    def get_champion(self):
-        return self.ladder[0]
-
     def update(self, winner, loser):
         players = self.ladder
         if winner in players and loser in players:
@@ -106,7 +88,7 @@ class Ladder:
         for player in self.ladder:
             i += 1
             html_players.append({'name': player.name, 'rank': i})
-        
+
         Htmlify(html_players, self.ladder_filename).gen_html()
 
     def read(self):
@@ -117,3 +99,21 @@ class Ladder:
                 return [line.rstrip('\n') for line in lines]
         except:
             self.save()
+
+    def get_player_pos(self, player):
+        return self.ladder.index(player)
+
+    def get_player(self, name):
+        try:
+            return self.players[name]
+        except:
+            return None
+
+    def get_players(self):
+        return self.players
+
+    def get_rankings(self):
+        return self.ladder
+
+    def get_champion(self):
+        return self.ladder[0]
