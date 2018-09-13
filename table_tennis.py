@@ -4,9 +4,6 @@ from group import Group
 from ladder import Ladder
 from player import Player
 
-group_list_filename = "groups"
-groups = {}
-
 welcome = r"""
           ,;;;!!!!!;;.
         :!!!!!!!!!!!!!!;    Infinity Works Graduate Scheme 2018
@@ -38,15 +35,14 @@ champ = r"""
 
 @click.command()
 @click.argument('group')
-# @click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
 @click.option('--new', '-n', is_flag=True, help='Flag to create new group ladders.')
 @click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
-@click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
 @click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
-def main(group, add, update, view, search, remove, champion, new):
+def main(group,
+         new, add, update, view, remove, champion):
     """A simple program to view and administrate the IW Table Tennis ladder.
 
         Provide a GROUP name and use the options listed below to interact with the system."""
@@ -93,7 +89,8 @@ def input_game(ladder, winner_name, loser_name):
         loser = Player(loser_name)
     ladder.update(winner, loser)
 
-#TODO: Check that group doesn't already exist
+
+# TODO: Check that group doesn't already exist
 def create_group(name):
     new_group = Group(name)
     new_group.ladder.save()
