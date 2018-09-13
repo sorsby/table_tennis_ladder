@@ -1,18 +1,21 @@
 from player import Player
 from htmlify import Htmlify
 from prettytable import PrettyTable
+from persistence import Persistence
 
 
 class Ladder:
 
     # list of Player objects where each player has a name attribute.
     ladder = []
-    ladder_folder = "group_ladders/%s"
+    ladder_folder = "group_ladders"
 
     def __init__(self, name, new=True):
         self.players = {}
         self.ladder_filename = name
-        players = self.read()
+
+        self.file = Persistence(self.ladder_folder, self.ladder_filename, self.ladder)
+        players = self.file.read()
 
         # file not found or empty load some default data for testing
         if not players and not new:
@@ -85,28 +88,11 @@ class Ladder:
         self.save()
 
     def save(self):
-        filename = self.ladder_folder % self.ladder_filename
-        with open(filename, 'w') as f:
-            for player in self.ladder:
-                f.write(player.name + '\n')
-
-        # put data in format ready for html templating
-        html_players = []
-        i = 0
-        for player in self.ladder:
-            i += 1
-            html_players.append({'name': player.name, 'rank': i})
-
-        Htmlify(html_players, self.ladder_filename).gen_html()
+        self.file.save()
+        Htmlify(self.ladder_filename, self.ladder).gen_html()
 
     def read(self):
-        filename = self.ladder_folder % self.ladder_filename
-        try:
-            with open(filename, 'r') as f:
-                lines = f.readlines()
-                return [line.rstrip('\n') for line in lines]
-        except:
-            self.save()
+        self.file.read()
 
     def get_player_pos(self, player):
         return self.ladder.index(player)
