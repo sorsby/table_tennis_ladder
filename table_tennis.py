@@ -1,12 +1,8 @@
 import click
-from prettytable import PrettyTable
 
 from group import Group
 from ladder import Ladder
 from player import Player
-
-group_list_filename = "groups"
-groups = {}
 
 welcome = r"""
           ,;;;!!!!!;;.
@@ -29,7 +25,7 @@ champ = r"""
  .-\:      /-.
 | (|:.     |) |
  '-|:.     |-'     Current Champ: %s !!!
-   \::.    / 
+   \::.    /
     '::. .'          %s is overwhelmed with a feeling of pride and accomplishment.
       ) (            %s has truly earned the adoration of his/her peers.
     _.' '._
@@ -37,90 +33,76 @@ champ = r"""
 """
 
 
-def pretty_print(ladder):
-    t = PrettyTable(['Name', 'Position'])
-    i = 0
-    for player in ladder.get_rankings():
-        i += 1
-        t.add_row([player.name, i])
-    print t
-    print '\n'
-    t.clear()
-
-
-def add_test_player(players, name):
-    players[name] = Player(name)
-
-
-def get_group(name, test):
-    try:
-        return Group(name, test)
-    except:
-        print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
-        return None
-
-
 @click.command()
 @click.argument('group')
-@click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
 @click.option('--new', '-n', is_flag=True, help='Flag to create new group ladders.')
 @click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
-@click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
 @click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
-def main(group, test, add, update, view, search, remove, champion, new):
+def main(group,
+         new, add, update, view, remove, champion):
     """A simple program to view and administrate the IW Table Tennis ladder.
 
         Provide a GROUP name and use the options listed below to interact with the system."""
 
-    # players = ladder.get_players()
-
     print welcome
 
     if new and not update:
-        new_group = Group(group, test)
-        new_group.ladder.save()
-        print "Successfully added new group ladder: '%s'." % group
+        create_group(group)
         return
 
     # read group namme argument from command line and get group
-    cur_group = get_group(group, test)
+    cur_group = get_group(group)
     if not cur_group:
         return
 
     group_ladder = cur_group.get_ladder()
+    print_ladder = True
 
-    if test:
-        # implement tests for groups
-        pass
     if add:
         for name in add:
             group_ladder.add_player(name)
-        pretty_print(group_ladder)
     if remove:
         for name in remove:
             group_ladder.remove_player(name)
-        pretty_print(group_ladder)
     if champion:
         name = group_ladder.get_champion().name
         print champ % (name, name, name)
+        print_ladder = False
     if update:
-        input_game(group_ladder, update[0], update[1])
-        pretty_print(group_ladder)
-    if view:
-        pretty_print(group_ladder)
+        winner_name = update[0]
+        loser_name = update[1]
+        input_game(group_ladder, winner_name, loser_name)
+
+    if print_ladder or view:
+        print group_ladder
 
 
-def input_game(ladder, arg0, arg1):
-    winner = ladder.get_player(arg0)
-    loser = ladder.get_player(arg1)
+def input_game(ladder, winner_name, loser_name):
+    winner = ladder.get_player(winner_name)
+    loser = ladder.get_player(loser_name)
     if not winner:
-        winner = Player(arg0)
+        winner = Player(winner_name)
     if not loser:
-        loser = Player(arg1)
+        loser = Player(loser_name)
     ladder.update(winner, loser)
+
+
+# TODO: Check that group doesn't already exist
+def create_group(name):
+    new_group = Group(name)
+    new_group.ladder.save()
+    print "Successfully added new group ladder: '%s'." % name
+
+
+def get_group(name):
+    try:
+        return Group(name)
+    except:
+        print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
+        return None
 
 
 if __name__ == '__main__':
