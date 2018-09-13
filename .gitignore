@@ -2,4 +2,6 @@
 *.pyc
 .DS_Store
 
+group_ladders/
 ladder_standings
+html/out/

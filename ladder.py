@@ -1,24 +1,33 @@
 from player import Player
+from htmlify import Htmlify
 
 
 class Ladder:
 
-    # dict of player name keys and associated player objects
-    players = {}
     # list of Player objects where each player has a name attribute.
     ladder = []
-    ladder_filename = "ladder_standings"
+    ladder_folder = "group_ladders/%s"
 
-    def __init__(self):
+    def __init__(self, name, new=True):
+        self.players = {}
+        self.ladder_filename = name
         players = self.read()
-        # file not found or empty load some default data for testing
-        if not players:
-            players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
 
-        for player in players:
-            player_object = Player(player)
-            self.ladder.append(player_object)
-            self.players[player] = player_object
+        # file not found or empty load some default data for testing
+        if not players and not new:
+            self.players['Ash'] = Player('Ash')
+            self.players['Matt'] = Player('Matt')
+            self.players['Mike'] = Player('Dan')
+            self.players['Dan'] = Player('Dan')
+            self.players['Emily'] = Player('Emily')
+            players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
+            self.save()
+
+        if players:
+            for player in players:
+                player_object = Player(player)
+                self.ladder.append(player_object)
+                self.players[player] = player_object
 
     def __repr__(self):
         return str([player.name for player in self.ladder])
@@ -29,7 +38,8 @@ class Ladder:
             self.ladder.append(player)
             self.players[name] = player
             self.save()
-            print "Player '%s' added successfully." % name
+            print "Player '%s' successfully added to group '%s'." % (
+                name, self.ladder_filename)
         else:
             print "ERROR: %s already in the ladder, skipping." % name
 
@@ -40,7 +50,8 @@ class Ladder:
             del self.players[name]
 
             self.save()
-            print "Player '%s' removed successfully." % name
+            print "Player '%s' successfully removed from group '%s'." % (
+                name, self.ladder_filename)
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
@@ -67,29 +78,41 @@ class Ladder:
         if winner in players and loser in players:
             winner_pos = self.get_player_pos(winner)
             loser_pos = self.get_player_pos(loser)
-            del players[winner_pos]
-            players.insert(loser_pos, winner)
+            if winner_pos > loser_pos:
+                del players[winner_pos]
+                players.insert(loser_pos, winner)
         elif winner in players and loser not in players:
-            self.add_player(loser)
+            self.add_player(loser.name)
         elif winner not in players and loser in players:
             loser_pos = self.get_player_pos(loser)
             players.insert(loser_pos, winner)
         else:
-            self.add_player(winner)
-            self.add_player(loser)
+            self.add_player(winner.name)
+            self.add_player(loser.name)
 
-        print "Leaderboard updated: '%s' beat '%s'." % (winner.name, loser.name)
+        print "Leaderboard updated: '%s' beat '%s'." % (
+            winner.name, loser.name)
         self.save()
 
     def save(self):
-        with open(self.ladder_filename, 'w') as f:
+        filename = self.ladder_folder % self.ladder_filename
+        with open(filename, 'w') as f:
             for player in self.ladder:
-                name = player.name
-                f.write(name + '\n')
+                f.write(player.name + '\n')
+
+        # put data in format ready for html templating
+        html_players = []
+        i = 0
+        for player in self.ladder:
+            i += 1
+            html_players.append({'name': player.name, 'rank': i})
+        
+        Htmlify(html_players, self.ladder_filename).gen_html()
 
     def read(self):
+        filename = self.ladder_folder % self.ladder_filename
         try:
-            with open(self.ladder_filename, 'r') as f:
+            with open(filename, 'r') as f:
                 lines = f.readlines()
                 return [line.rstrip('\n') for line in lines]
         except:
