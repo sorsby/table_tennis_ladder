@@ -1,17 +1,22 @@
 from player import Player
 from htmlify import Htmlify
+from prettytable import PrettyTable
+from persistence import Persistence
 
 
 class Ladder:
 
     # list of Player objects where each player has a name attribute.
     ladder = []
-    ladder_folder = "group_ladders/%s"
+    ladder_folder = "group_ladders"
 
     def __init__(self, name, new=True):
         self.players = {}
         self.ladder_filename = name
-        players = self.read()
+
+        self.file = Persistence(
+            self.ladder_folder, self.ladder_filename, self.ladder)
+        players = self.file.read()
 
         # file not found or empty load some default data for testing
         if not players and not new:
@@ -30,7 +35,14 @@ class Ladder:
                 self.players[player] = player_object
 
     def __repr__(self):
-        return str([player.name for player in self.ladder])
+        t = PrettyTable(['Name', 'Position'])
+        i = 0
+        for player in self.get_rankings():
+            i += 1
+            t.add_row([player.name, i])
+        message = "Viewing ladder rankings for '%s' group." % self.ladder_filename
+        return message + '\n' + t.get_string() + '\n'
+        # return str([player.name for player in self.ladder])
 
     def add_player(self, name):
         if not name in self.players.keys():
@@ -55,6 +67,30 @@ class Ladder:
         else:
             print "ERROR: %s is not in the ladder, skipping." % name
 
+    def update(self, winner, loser):
+        if winner not in self.ladder:
+            self.add_player(winner.name)
+
+        if loser not in self.ladder:
+            self.add_player(loser.name)
+
+        winner_pos = self.get_player_pos(winner)
+        loser_pos = self.get_player_pos(loser)
+        if winner_pos > loser_pos:
+            del self.ladder[winner_pos]
+            self.ladder.insert(loser_pos, winner)
+
+        print "Leaderboard updated: '%s' beat '%s'." % (
+            winner.name, loser.name)
+        self.save()
+
+    def save(self):
+        self.file.save()
+        Htmlify(self.ladder_filename, self.ladder).gen_html()
+
+    def read(self):
+        self.file.read()
+
     def get_player_pos(self, player):
         return self.ladder.index(player)
 
@@ -72,48 +108,3 @@ class Ladder:
 
     def get_champion(self):
         return self.ladder[0]
-
-    def update(self, winner, loser):
-        players = self.ladder
-        if winner in players and loser in players:
-            winner_pos = self.get_player_pos(winner)
-            loser_pos = self.get_player_pos(loser)
-            if winner_pos > loser_pos:
-                del players[winner_pos]
-                players.insert(loser_pos, winner)
-        elif winner in players and loser not in players:
-            self.add_player(loser.name)
-        elif winner not in players and loser in players:
-            loser_pos = self.get_player_pos(loser)
-            players.insert(loser_pos, winner)
-        else:
-            self.add_player(winner.name)
-            self.add_player(loser.name)
-
-        print "Leaderboard updated: '%s' beat '%s'." % (
-            winner.name, loser.name)
-        self.save()
-
-    def save(self):
-        filename = self.ladder_folder % self.ladder_filename
-        with open(filename, 'w') as f:
-            for player in self.ladder:
-                f.write(player.name + '\n')
-
-        # put data in format ready for html templating
-        html_players = []
-        i = 0
-        for player in self.ladder:
-            i += 1
-            html_players.append({'name': player.name, 'rank': i})
-        
-        Htmlify(html_players, self.ladder_filename).gen_html()
-
-    def read(self):
-        filename = self.ladder_folder % self.ladder_filename
-        try:
-            with open(filename, 'r') as f:
-                lines = f.readlines()
-                return [line.rstrip('\n') for line in lines]
-        except:
-            self.save()
