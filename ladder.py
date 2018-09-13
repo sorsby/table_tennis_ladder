@@ -7,13 +7,13 @@ class Ladder:
     ladder = []
     ladder_folder = "group_ladders/%s"
 
-    def __init__(self, name):
+    def __init__(self, name, new=True):
         self.players = {}
         self.ladder_filename = name
         players = self.read()
 
         # file not found or empty load some default data for testing
-        if not players:
+        if not players and not new:
             self.players['Ash'] = Player('Ash')
             self.players['Matt'] = Player('Matt')
             self.players['Mike'] = Player('Dan')
@@ -22,10 +22,11 @@ class Ladder:
             players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
             self.save()
 
-        for player in players:
-            player_object = Player(player)
-            self.ladder.append(player_object)
-            self.players[player] = player_object
+        if players:
+            for player in players:
+                player_object = Player(player)
+                self.ladder.append(player_object)
+                self.players[player] = player_object
 
     def __repr__(self):
         return str([player.name for player in self.ladder])

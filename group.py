@@ -11,9 +11,9 @@ class Group:
     ladder - instance of Ladder which stores leaderboard information for group.
     '''
 
-    def __init__(self, name):
+    def __init__(self, name, test):
         self.name = name
-        self.ladder = Ladder(name)
+        self.ladder = Ladder(name, not test)
 
     def get_ladder(self):
         return self.ladder

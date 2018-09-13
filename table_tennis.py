@@ -50,7 +50,7 @@ def pretty_print(ladder):
 def add_test_player(players, name):
     players[name] = Player(name)
 
-
+'''Not used atm'''
 def run_tests(test_players, ladder):
     ladder.add_player(Player('Malik'))
     pretty_print(ladder)
@@ -79,9 +79,9 @@ def run_tests(test_players, ladder):
     pretty_print(ladder)
 
 
-def get_group(name):
+def get_group(name, test):
     try:
-        return Group(name)
+        return Group(name, test)
     except:
         print "ERROR: Group with name '%s' does not exist! Check spelling and try again." % name
         return None
@@ -90,13 +90,14 @@ def get_group(name):
 @click.command()
 @click.argument('group')
 @click.option('--test', '-t', is_flag=True, help='Run a suite of tests.')
+@click.option('--new', '-n', is_flag=True, help='Flag to create new group ladders.')
 @click.option('--add', '-a', multiple=True, help='Add player(s) to the ladder (multiple players require multiple --add flags).')
 @click.option('--update', '-u', nargs=2, help='Update ladder with results of a game e.g. --update WINNER LOSER.')
 @click.option('--view', '-v', is_flag=True, help='View the current ladder positions.')
 @click.option('--search', '-s', help='Search for a player in the ladder. e.g. --search Ash')
 @click.option('--remove', '-r', multiple=True, help='Remove player(s) from the ladder (multiple players require multiple --remove flags).')
 @click.option('--champion', '-c', is_flag=True, help="Show the current champion and their pending title trophy.")
-def main(group, test, add, update, view, search, remove, champion):
+def main(group, test, add, update, view, search, remove, champion, new):
     """A simple program to view and administrate the IW Table Tennis ladder.
 
         Provide a GROUP name and use the options listed below to interact with the system."""
@@ -105,8 +106,14 @@ def main(group, test, add, update, view, search, remove, champion):
 
     print welcome
 
+    if new and not update:
+        new_group = Group(group, test)
+        new_group.ladder.save()
+        print "Successfully added new group ladder: '%s'." % group
+        return
+
     # read group namme argument from command line and get group
-    cur_group = get_group(group)
+    cur_group = get_group(group, test)
     if not cur_group:
         return
 
