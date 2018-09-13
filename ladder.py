@@ -99,13 +99,12 @@ class Ladder:
             for player in self.ladder:
                 f.write(player.name + '\n')
 
+        # put data in format ready for html templating
         html_players = []
         i = 0
         for player in self.ladder:
             i += 1
             html_players.append({'name': player.name, 'rank': i})
-
-        print html_players
         
         Htmlify(html_players, self.ladder_filename).gen_html()
 
