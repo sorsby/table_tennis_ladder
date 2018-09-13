@@ -14,7 +14,8 @@ class Ladder:
         self.players = {}
         self.ladder_filename = name
 
-        self.file = Persistence(self.ladder_folder, self.ladder_filename, self.ladder)
+        self.file = Persistence(
+            self.ladder_folder, self.ladder_filename, self.ladder)
         players = self.file.read()
 
         # file not found or empty load some default data for testing
@@ -67,21 +68,17 @@ class Ladder:
             print "ERROR: %s is not in the ladder, skipping." % name
 
     def update(self, winner, loser):
-        players = self.ladder
-        if winner in players and loser in players:
-            winner_pos = self.get_player_pos(winner)
-            loser_pos = self.get_player_pos(loser)
-            if winner_pos > loser_pos:
-                del players[winner_pos]
-                players.insert(loser_pos, winner)
-        elif winner in players and loser not in players:
-            self.add_player(loser.name)
-        elif winner not in players and loser in players:
-            loser_pos = self.get_player_pos(loser)
-            players.insert(loser_pos, winner)
-        else:
+        if winner not in self.ladder:
             self.add_player(winner.name)
+
+        if loser not in self.ladder:
             self.add_player(loser.name)
+
+        winner_pos = self.get_player_pos(winner)
+        loser_pos = self.get_player_pos(loser)
+        if winner_pos > loser_pos:
+            del self.ladder[winner_pos]
+            self.ladder.insert(loser_pos, winner)
 
         print "Leaderboard updated: '%s' beat '%s'." % (
             winner.name, loser.name)
