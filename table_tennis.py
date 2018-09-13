@@ -3,6 +3,7 @@ from player import Player
 from group import Group
 import click
 from prettytable import PrettyTable
+import validation
 
 group_list_filename = "groups"
 groups = {}
@@ -122,11 +123,11 @@ def main(group, test, add, update, view, search, remove, champion, new):
     if test:
         # implement tests for groups
         pass
-    if add:
+    if add and validation.data_validation(add):
         for name in add:
             group_ladder.add_player(name)
         pretty_print(group_ladder)
-    if remove:
+    if remove and validation.data_validation(remove):
         for name in remove:
             group_ladder.remove_player(name)
         pretty_print(group_ladder)
@@ -134,8 +135,9 @@ def main(group, test, add, update, view, search, remove, champion, new):
         name = group_ladder.get_champion().name
         print champ % (name, name, name)
     if update:
-        input_game(group_ladder, update[0], update[1])
-        pretty_print(group_ladder)
+        if validation.data_validation(update[0]) and validation.data_validation(update[1]):
+            input_game(group_ladder, update[0], update[1])
+            pretty_print(group_ladder)
     if view:
         pretty_print(group_ladder)
 
