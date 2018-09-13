@@ -1,8 +1,9 @@
-from ladder import Ladder
-from player import Player
-from group import Group
 import click
 from prettytable import PrettyTable
+
+from group import Group
+from ladder import Ladder
+from player import Player
 
 group_list_filename = "groups"
 groups = {}
