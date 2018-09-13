@@ -1,4 +1,5 @@
 from player import Player
+from htmlify import Htmlify
 
 
 class Ladder:
@@ -97,6 +98,16 @@ class Ladder:
         with open(filename, 'w') as f:
             for player in self.ladder:
                 f.write(player.name + '\n')
+
+        html_players = []
+        i = 0
+        for player in self.ladder:
+            i += 1
+            html_players.append({'name': player.name, 'rank': i})
+
+        print html_players
+        
+        Htmlify(html_players, self.ladder_filename).gen_html()
 
     def read(self):
         filename = self.ladder_folder % self.ladder_filename
