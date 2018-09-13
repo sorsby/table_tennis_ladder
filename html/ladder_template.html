@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="slashicon.png" type="image/png" sizes="16x16">
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,7 +26,7 @@
                 <table class="table">
 
                     <thead>
-                        <tr>
+                        <tr style="text-align: center">
                             <th>Player</th>
                             <th>Rank</th>
                         </tr>
@@ -32,8 +34,8 @@
 
                     #for @player in @self.players:
                     <tr>
-                        <td>@player.name</td>
-                        <td>@player.rank</td>
+                        <td style="text-align: center">@player.name</td>
+                        <td style="text-align: center">@player.rank</td>
                     </tr>
                     #end
                 </table>

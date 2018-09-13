@@ -78,8 +78,9 @@ class Ladder:
         if winner in players and loser in players:
             winner_pos = self.get_player_pos(winner)
             loser_pos = self.get_player_pos(loser)
-            del players[winner_pos]
-            players.insert(loser_pos, winner)
+            if winner_pos > loser_pos:
+                del players[winner_pos]
+                players.insert(loser_pos, winner)
         elif winner in players and loser not in players:
             self.add_player(loser.name)
         elif winner not in players and loser in players:
