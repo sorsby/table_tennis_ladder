@@ -3,6 +3,7 @@ import click
 from group import Group
 from ladder import Ladder
 from player import Player
+import validation
 
 welcome = r"""
           ,;;;!!!!!;;.
@@ -61,7 +62,7 @@ def main(group,
     group_ladder = cur_group.get_ladder()
     print_ladder = True
 
-    if add:
+    if add and validation.data_validation(add):
         for name in add:
             group_ladder.add_player(name)
     if remove:
@@ -71,7 +72,7 @@ def main(group,
         name = group_ladder.get_champion().name
         print champ % (name, name, name)
         print_ladder = False
-    if update:
+    if update and (validation.data_validation(update[0]) and validation.data_validation(update[1])):
         winner_name = update[0]
         loser_name = update[1]
         input_game(group_ladder, winner_name, loser_name)
