@@ -1,4 +1,5 @@
 from quik import FileLoader, Template
+import os
 
 
 class Htmlify:
@@ -22,9 +23,12 @@ class Htmlify:
 
     def write_html(self, html):
         filepath = 'html/out/'
-        with open(filepath + self.group + '.html', 'w') as f:
-            f.writelines(html)
-
+        try:
+            with open(filepath + self.group + '.html', 'w') as f:
+                f.writelines(html)
+        except IOError:
+            os.mkdir(filepath)
+            self.write_html(html)
 
 # players = [{'name': 'Matt', 'rank': 1},
 #            {'name': 'Rob', 'rank': 2},
