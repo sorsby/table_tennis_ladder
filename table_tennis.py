@@ -51,9 +51,8 @@ def main(group,
     print_ladder = True
 
     # read group namme argument from command line and get group
-    if new:
-        cur_group = get_group(group)
-        group_ladder = cur_group.get_ladder()
+    cur_group = get_group(group)
+    group_ladder = cur_group.get_ladder()
 
     if add:
         for name in add:
@@ -66,22 +65,10 @@ def main(group,
         print champ % (name, name, name)
         print_ladder = False
     if update:
-        winner_name = update[0]
-        loser_name = update[1]
-        input_game(group_ladder, winner_name, loser_name)
-
+        group_ladder.update(group_ladder.get_player(update[0]),
+                            group_ladder.get_player(update[1]))
     if print_ladder or view:
         print group_ladder
-
-
-def input_game(ladder, winner_name, loser_name):
-    winner = ladder.get_player(winner_name)
-    loser = ladder.get_player(loser_name)
-    if not winner:
-        winner = Player(winner_name)
-    if not loser:
-        loser = Player(loser_name)
-    ladder.update(winner, loser)
 
 
 def get_group(name):
