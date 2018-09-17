@@ -48,18 +48,12 @@ def main(group,
         Provide a GROUP name and use the options listed below to interact with the system."""
 
     print welcome
-
-    if new and not update:
-        create_group(group)
-        return
+    print_ladder = True
 
     # read group namme argument from command line and get group
-    cur_group = get_group(group)
-    if not cur_group:
-        return
-
-    group_ladder = cur_group.get_ladder()
-    print_ladder = True
+    if new:
+        cur_group = get_group(group)
+        group_ladder = cur_group.get_ladder()
 
     if add:
         for name in add:
@@ -88,13 +82,6 @@ def input_game(ladder, winner_name, loser_name):
     if not loser:
         loser = Player(loser_name)
     ladder.update(winner, loser)
-
-
-# TODO: Check that group doesn't already exist
-def create_group(name):
-    new_group = Group(name)
-    new_group.ladder.save()
-    print "Successfully added new group ladder: '%s'." % name
 
 
 def get_group(name):

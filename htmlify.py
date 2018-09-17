@@ -3,10 +3,14 @@ from quik import FileLoader, Template
 
 class Htmlify:
 
+    template_filepath = 'html'
+    out_filepath = 'html/out/'
+    ladder_template = 'ladder_template.html'
+
     def __init__(self, group, ladder):
         self.group = group
-        self.loader = FileLoader('html')
-        self.template = self.loader.load_template('ladder_template.html')
+        self.loader = FileLoader(self.template_filepath)
+        self.template = self.loader.load_template(self.ladder_template)
 
         # put data in format ready for html templating
         html_players = []
@@ -21,14 +25,5 @@ class Htmlify:
         self.write_html(html)
 
     def write_html(self, html):
-        filepath = 'html/out/'
-        with open(filepath + self.group + '.html', 'w') as f:
+        with open(self.out_filepath + self.group + '.html', 'w') as f:
             f.writelines(html)
-
-
-# players = [{'name': 'Matt', 'rank': 1},
-#            {'name': 'Rob', 'rank': 2},
-#            {'name': 'Mike', 'rank': 3},
-#            {'name': 'James', 'rank': 4}]
-
-# group = "Hermes"

@@ -15,6 +15,8 @@ class Group:
         self.name = name
         self.ladder = Ladder(name)
 
+        self.ladder.save()
+
     def get_ladder(self):
         return self.ladder
 

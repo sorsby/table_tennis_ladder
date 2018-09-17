@@ -2,31 +2,22 @@ from player import Player
 from htmlify import Htmlify
 from prettytable import PrettyTable
 from persistence import Persistence
+from group import Group
 
 
 class Ladder:
 
-    # list of Player objects where each player has a name attribute.
     ladder = []
     ladder_folder = "group_ladders"
 
-    def __init__(self, name, new=True):
+    def __init__(self, group_name):
         self.players = {}
-        self.ladder_filename = name
+        self.ladder_filename = group_name
 
+        # init the persistence object for reading and saving the ladder
         self.file = Persistence(
             self.ladder_folder, self.ladder_filename, self.ladder)
         players = self.file.read()
-
-        # file not found or empty load some default data for testing
-        if not players and not new:
-            self.players['Ash'] = Player('Ash')
-            self.players['Matt'] = Player('Matt')
-            self.players['Mike'] = Player('Dan')
-            self.players['Dan'] = Player('Dan')
-            self.players['Emily'] = Player('Emily')
-            players = ['Ash', 'Matt', 'Mike', 'Dan', 'Emily']
-            self.save()
 
         if players:
             for player in players:
@@ -42,7 +33,6 @@ class Ladder:
             t.add_row([player.name, i])
         message = "Viewing ladder rankings for '%s' group." % self.ladder_filename
         return message + '\n' + t.get_string() + '\n'
-        # return str([player.name for player in self.ladder])
 
     def add_player(self, name):
         if not name in self.players.keys():
