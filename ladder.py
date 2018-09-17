@@ -2,7 +2,6 @@ from player import Player
 from htmlify import Htmlify
 from prettytable import PrettyTable
 from persistence import Persistence
-from group import Group
 
 
 class Ladder:
