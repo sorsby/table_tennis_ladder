@@ -2,12 +2,14 @@ from player import Player
 from htmlify import Htmlify
 from prettytable import PrettyTable
 from persistence import Persistence
+from mocks.printer import Printer
 
 
 class Ladder:
 
     ladder = []
     ladder_folder = "group_ladders"
+    printer = Printer()
 
     def __init__(self, group_name):
         self.players = {}
@@ -51,10 +53,12 @@ class Ladder:
             del self.players[name]
 
             self.save()
-            print "Player '%s' successfully removed from group '%s'." % (
-                name, self.ladder_filename)
+            self.printer.set_string("Player '%s' successfully removed from group '%s'." % (
+                name, self.ladder_filename))
+            self.printer.prnt()
         else:
-            print "ERROR: %s is not in the ladder, skipping." % name
+            self.printer.set_string("ERROR: %s is not in the ladder, skipping." % name)
+            self.printer.prnt()
 
     def update(self, winner, loser):
         if winner not in self.ladder:
