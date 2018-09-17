@@ -12,7 +12,7 @@ class Persistence:
             with open(self.ladder_filepath, 'r') as f:
                 lines = f.readlines()
                 return [line.rstrip('\n') for line in lines]
-        except:
+        except IOError:
             self.save()
 
     def save(self):
@@ -21,4 +21,7 @@ class Persistence:
                 f.write(player.name + '\n')
 
     def delete(self):
-        os.remove(self.ladder_filepath)
+        try:
+            os.remove(self.ladder_filepath)
+        except IOError:
+            print "ERROR: Attempting to delete a file that doesn't exist: '%s'" % self.group_name
