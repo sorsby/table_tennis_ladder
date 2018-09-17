@@ -92,7 +92,7 @@ class Ladder:
         try:
             return self.players[name]
         except:
-            return None
+            return Player(name)
 
     def get_players(self):
         return self.players
