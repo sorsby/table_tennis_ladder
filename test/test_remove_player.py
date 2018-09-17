@@ -1,7 +1,6 @@
 import unittest
 from ladder import Ladder
 from player import Player
-from mocks.printer import Printer
 
 class TestRemovePlayer(unittest.TestCase):
 

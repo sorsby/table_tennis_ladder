@@ -60,6 +60,14 @@ class TestUpdateLadderStandings(unittest.TestCase):
         expected = [winner, loser]
         self.assertListEqual(self.ladder.ladder, expected)
 
+    def test_ladder_update_success_msg(self):
+        winner = Player('Icarus')
+        loser = Player('Ben')
+        self.ladder.update(winner, loser)
+
+        expected = "Leaderboard updated: 'Icarus' beat 'Ben'."
+        self.assertEqual(expected, self.ladder.printer.string)
+
 
 if __name__ == '__main__':
     unittest.main()

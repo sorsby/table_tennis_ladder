@@ -73,8 +73,9 @@ class Ladder:
             del self.ladder[winner_pos]
             self.ladder.insert(loser_pos, winner)
 
-        print "Leaderboard updated: '%s' beat '%s'." % (
-            winner.name, loser.name)
+        self.printer.set_string("Leaderboard updated: '%s' beat '%s'." % (
+            winner.name, loser.name))
+        self.printer.prnt()
         self.save()
 
     def save(self):
