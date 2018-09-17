@@ -101,3 +101,4 @@ class Ladder:
     def clear(self):
         self.ladder = []
         self.players.clear()
+        self.file.delete()

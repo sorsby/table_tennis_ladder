@@ -1,3 +1,5 @@
+import os
+
 class Persistence:
 
     def __init__(self, ladder_folder, group_name, ladder):
@@ -17,3 +19,6 @@ class Persistence:
         with open(self.ladder_filepath, 'w') as f:
             for player in self.ladder:
                 f.write(player.name + '\n')
+
+    def delete(self):
+        os.remove(self.ladder_filepath)

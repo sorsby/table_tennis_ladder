@@ -7,9 +7,10 @@ class TestUpdateLadderStandings(unittest.TestCase):
 
     ladder = Ladder('test_group')
 
-    def test_both_players_in_ladder_winner_higher_rank(self):
+    def tearDown(self):
         self.ladder.clear()
 
+    def test_both_players_in_ladder_winner_higher_rank(self):
         winner = Player('Icarus')
         loser = Player('Ben')
 
@@ -20,8 +21,6 @@ class TestUpdateLadderStandings(unittest.TestCase):
         self.assertListEqual(self.ladder.ladder, expected_ladder)
 
     def test_both_players_in_ladder_winner_lower_rank(self):
-        self.ladder.clear()
-
         winner = Player('Icarus')
         loser = Player('Ben')
 
@@ -32,7 +31,6 @@ class TestUpdateLadderStandings(unittest.TestCase):
         self.assertListEqual(self.ladder.ladder, expected_ladder)
 
     def test_winner_in_ladder_loser_not(self):
-        self.ladder.clear()
         winner = Player('Icarus')
         loser = Player('Ben')
 
@@ -43,7 +41,6 @@ class TestUpdateLadderStandings(unittest.TestCase):
         self.assertListEqual(self.ladder.ladder, expected)
 
     def test_loser_in_ladder_winner_not(self):
-        self.ladder.clear()
         winner = Player('Icarus')
         loser = Player('Ben')
 
@@ -54,7 +51,6 @@ class TestUpdateLadderStandings(unittest.TestCase):
         self.assertListEqual(self.ladder.ladder, expected)
 
     def test_both_not_in_ladder(self):
-        self.ladder.clear()
         winner = Player('Icarus')
         loser = Player('Ben')
 
