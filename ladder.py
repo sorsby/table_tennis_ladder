@@ -97,3 +97,7 @@ class Ladder:
 
     def get_champion(self):
         return self.ladder[0]
+
+    def clear(self):
+        self.ladder = []
+        self.players.clear()

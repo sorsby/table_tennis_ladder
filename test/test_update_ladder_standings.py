@@ -1,90 +1,68 @@
 import unittest
+from ladder import Ladder
 from player import Player
-# from ladder import Ladder
-
-
-class MockLadder:
-
-    ladder = []
-    players = {}
-
-    def __init__(self, name):
-        self.name = name
-
-    def add_player(self, name):
-        if not name in self.players.keys():
-            player = Player(name)
-            self.ladder.append(player)
-            self.players[name] = player
-
-    def get_player_pos(self, player):
-        return self.ladder.index(player)
-
-    def update(self, winner, loser):
-        if winner not in self.ladder:
-            self.add_player(winner.name)
-
-        if loser not in self.ladder:
-            self.add_player(loser.name)
-
-        winner_pos = self.get_player_pos(winner)
-        loser_pos = self.get_player_pos(loser)
-        if winner_pos > loser_pos:
-            del self.ladder[winner_pos]
-            self.ladder.insert(loser_pos, winner)
 
 
 class TestUpdateLadderStandings(unittest.TestCase):
 
+    ladder = Ladder('test_group')
+
     def test_both_players_in_ladder_winner_higher_rank(self):
-        ladder = MockLadder('test_group')
+        self.ladder.clear()
 
         winner = Player('Icarus')
         loser = Player('Ben')
 
-        ladder.ladder = [Player('Dan'), winner, loser]
-        ladder.update(winner, loser)
+        self.ladder.ladder = [winner, loser]
+        self.ladder.update(winner, loser)
 
-        expected_ladder = [Player('Dan'), winner, loser]
-        self.assertListEqual(ladder.ladder, expected_ladder)
+        expected_ladder = [winner, loser]
+        self.assertListEqual(self.ladder.ladder, expected_ladder)
 
     def test_both_players_in_ladder_winner_lower_rank(self):
-        ladder = MockLadder('test_group')
+        self.ladder.clear()
 
         winner = Player('Icarus')
         loser = Player('Ben')
 
-        ladder.ladder = [Player('Dan'), loser, winner]
-        ladder.update(winner, loser)
+        self.ladder.ladder = [loser, winner]
+        self.ladder.update(winner, loser)
 
-        expected_ladder = [Player('Dan'), winner, loser]
-        self.assertListEqual(ladder.ladder, expected_ladder)
+        expected_ladder = [winner, loser]
+        self.assertListEqual(self.ladder.ladder, expected_ladder)
 
     def test_winner_in_ladder_loser_not(self):
-        ladder = MockLadder('test_group')
+        self.ladder.clear()
+        winner = Player('Icarus')
+        loser = Player('Ben')
 
-        ladder.add_player('Winner')
-        ladder.update(ladder.players['Winner'], Player('Loser'))
+        self.ladder.ladder = [winner]
+        self.ladder.update(winner, loser)
 
-        expected = [ladder.players['Winner'], ladder.players['Loser']]
-        self.assertListEqual(expected, ladder.ladder)
+        expected = [winner, loser]
+        self.assertListEqual(self.ladder.ladder, expected)
 
     def test_loser_in_ladder_winner_not(self):
-        ladder = MockLadder('test_group')
+        self.ladder.clear()
+        winner = Player('Icarus')
+        loser = Player('Ben')
 
-        ladder.add_player('Loser')
-        ladder.update(Player('Winner'), ladder.players['Loser'])
+        self.ladder.ladder = [loser]
+        self.ladder.update(winner, loser)
 
-        expected = [ladder.players['Winner'], ladder.players['Loser']]
-        self.assertListEqual(expected, ladder.ladder)
+        expected = [winner, loser]
+        self.assertListEqual(self.ladder.ladder, expected)
 
     def test_both_not_in_ladder(self):
-        ladder = MockLadder('test_group')
+        self.ladder.clear()
+        winner = Player('Icarus')
+        loser = Player('Ben')
 
-        ladder.update(Player('Winner'), Player('Loser'))
+        self.ladder.ladder = []
+        self.ladder.update(winner, loser)
 
-        expected = [ladder.players['Winner'], ladder.players['Loser']]
-        self.assertListEqual(expected, ladder.ladder)
+        expected = [winner, loser]
+        self.assertListEqual(self.ladder.ladder, expected)
 
 
 if __name__ == '__main__':
