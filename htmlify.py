@@ -10,11 +10,11 @@ class Htmlify:
         self.template = self.loader.load_template('ladder_template.html')
 
         # put data in format ready for html templating
-        html_players = []
+        self.html_players = []
         i = 0
         for player in ladder:
             i += 1
-            html_players.append({'name': player.name, 'rank': i})
+            self.html_players.append({'name': player.name, 'rank': i})
 
     def gen_html(self):
         html = self.template.render(
